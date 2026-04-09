@@ -4,7 +4,6 @@ name: Lint
   pull_request:
   push:
     branches:
-      - main
       - fix-token-initialization
       - fix-kubeconfig-tag
 
