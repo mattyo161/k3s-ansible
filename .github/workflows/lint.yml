@@ -4,8 +4,9 @@ name: Lint
   pull_request:
   push:
     branches:
-      - fix-token-initialization
-      - fix-kubeconfig-tag
+      - mou-latest
+      # - fix-token-initialization
+      # - fix-kubeconfig-tag
 
 jobs:
 

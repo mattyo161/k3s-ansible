@@ -3,8 +3,9 @@ name: Build
 on:
   push:
     branches:
-      - fix-token-initialization
-      - fix-kubeconfig-tag
+      - mou-latest
+      # - fix-token-initialization
+      # - fix-kubeconfig-tag
 
 jobs:
 
