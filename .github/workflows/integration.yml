@@ -399,7 +399,7 @@ jobs:
       - name: Run Playbook
         env:
           ANSIBLE_FORCE_COLOR: '1'
-        run: ansible-playbook playbooks/site.yml -i tests/ha.yml
+        run: ansible-playbook playbooks/site.yml -i tests/ha-wo-token.yml
 
       - name: Verify K3s is running on servers
         run: docker exec server-node1 k3s kubectl get nodes | grep Ready | wc -l | grep 3
@@ -421,10 +421,10 @@ jobs:
 
       - name: Modify the k3s_version in inventory for upgrade
         run: |
-          sed -i 's/k3s_version: v1.33.4+k3s1/k3s_version: v1.34.1+k3s1/' tests/ha.yml
+          sed -i 's/k3s_version: v1.33.4+k3s1/k3s_version: v1.34.1+k3s1/' tests/ha-wo-token.yml
 
       - name: Run Upgrade Playbook
-        run: ansible-playbook playbooks/upgrade.yml -i tests/ha.yml
+        run: ansible-playbook playbooks/upgrade.yml -i tests/ha-wo-token.yml
 
       - name: Verify K3s upgraded on all servers
         run: |
@@ -467,7 +467,7 @@ jobs:
           docker exec server-node1 journalctl -u k3s -n 10
 
       - name: Remove K3s from server nodes
-        run: ansible-playbook playbooks/reset.yml -i tests/ha.yml
+        run: ansible-playbook playbooks/reset.yml -i tests/ha-wo-token.yml
 
       - name: Stop and remove Docker containers
         run: |
