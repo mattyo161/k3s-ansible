@@ -3,6 +3,11 @@
   ansible.builtin.stat:
     path: /boot/firmware/cmdline.txt
   register: raspberrypi_boot_file
+  
+- name: Check if /boot/firmware/current/cmdline.txt exists
+  ansible.builtin.stat:
+    path: /boot/firmware/current/cmdline.txt
+  register: raspberrypi_boot_file_current
 
 - name: Enable cgroup via boot commandline if not already enabled
   ansible.builtin.replace:
@@ -15,6 +20,7 @@
     - "cgroup_enable=memory"
   loop_control:
     loop_var: cgroup_item
+  when: raspberrypi_boot_file.stat.exists or raspberrypi_boot_file_current.stat.exists
   notify: Reboot Pi
 
 - name: Install Ubuntu Raspi Extra Packages
@@ -24,4 +30,4 @@
     name: linux-modules-extra-raspi
     update_cache: "{{ airgap_dir is not defined }}"
     state: present
-  when: "ansible_facts['distribution_version'] is version('20.10', '>=') and ansible_facts['distribution_version'] is version('24.04', '<')"
+  when: "(raspberrypi_boot_file.stat.exists or raspberrypi_boot_file_current.stat.exists) and ansible_facts['distribution_version'] is version('20.10', '>=') and ansible_facts['distribution_version'] is version('24.04', '<')"
